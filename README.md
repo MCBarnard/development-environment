@@ -3,7 +3,7 @@ This is a docker compose project that spins up a development environment with sp
 Simply navigate into the app directory, build your project and serve your project from the public directory. 
 
 ## Setup
-To get started, run `dc up -d`
+To get started, rename the .env.example to .env `mv .env-example .env` and run `dc up -d`
 
 ## Services
 * Nginx server pointing to the [public directory](http://0.0.0.0:8000)
