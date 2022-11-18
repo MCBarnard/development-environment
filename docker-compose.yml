@@ -1,0 +1,113 @@
+version: "3.8"
+services:
+# ========================== APPS ================================= #
+  # Application container
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    expose:
+      - 9000
+    volumes:
+      - ./app:/usr/src/app
+      - ./app/public:/usr/src/app/public
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # Web Server
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    volumes:
+      - ./app/public:/usr/src/app/public
+    ports:
+      - 8000:80
+    depends_on:
+      - app
+    environment:
+      NGINX_FPM_HOST: app
+      NGINX_ROOT: /usr/src/app/public
+    networks:
+      - app_network
+
+  # Database
+  db:
+    container_name: db
+    image: mysql:8.0.20
+    restart: always
+    volumes:
+      - ./.docker/mysql/db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: app_tables
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - app_network
+
+  # Redis
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - app_network
+
+# ========================= TOOLS ================================= #
+    # PHP MyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOSTS=db
+      - PMA_PASSWORD=${DB_PASSWORD}
+      - PMA_USER=${DB_USER}
+    depends_on:
+      - db
+      - app
+    networks:
+      - app_network
+  # Redis Cache Manager
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: ghcr.io/joeferner/redis-commander:latest
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+    ports:
+      - 8082:8081
+    networks:
+      - app_network
+  # Queue manager
+  rabbitmq:
+    image: "rabbitmq:3.8-management"
+    container_name: rabbitmq
+    ports:
+      - 8083:15672
+    environment:
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_VHOST=guest
+    depends_on:
+      - redis
+      - redis-commander
+      - db
+    networks:
+      - app_network
+# ================================================================= #
+networks:
+  app_network:
+    driver: bridge
