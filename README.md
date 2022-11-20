@@ -3,7 +3,7 @@ This is a docker compose project that spins up a development environment with sp
 Simply navigate into the app directory, build your project and serve your project from the public directory. 
 
 ## Setup
-To get started, rename the .env.example to .env `mv .env-example .env` and run `dc up -d`
+To get started, rename the .env.example to .env `mv .env-example .env` and run `docker-compose up -d`
 
 ## Services
 #### This is for development navigation and can only be run once docker is up
