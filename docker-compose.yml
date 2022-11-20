@@ -26,7 +26,7 @@ services:
     volumes:
       - ./app/public:/usr/src/app/public
     ports:
-      - 8000:80
+      - 80:80
     depends_on:
       - app
     environment:
@@ -108,6 +108,11 @@ services:
     networks:
       - app_network
 # ================================================================= #
+# ========================= LOGGING =============================== #
+# ================================================================= #
+volumes:
+  elasticsearch-data-volume:
+    driver: local
 networks:
   app_network:
     driver: bridge
