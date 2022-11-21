@@ -38,6 +38,7 @@ RUN apt-get update \
         pdo_pgsql \
         pgsql \
         pcntl \
+        sockets \
         zip \
     && docker-php-ext-enable redis \
     && rm -rf /var/lib/apt/lists/*;
@@ -50,8 +51,8 @@ WORKDIR /usr/src/app
 RUN chown -R www-data:www-data .
 
 # Build vendor file
-COPY ./app /usr/src/app
-RUN #composer install --no-progress --no-interaction
+# COPY ./app /usr/src/app
+# RUN composer install --no-progress --no-interaction
 
 # Build assets
 #RUN npm install --global cross-env

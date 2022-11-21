@@ -104,9 +104,9 @@ services:
     ports:
       - 8083:15672
     environment:
-      - RABBITMQ_DEFAULT_PASS=guest
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_VHOST=guest
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
     depends_on:
       - redis
       - redis-commander
