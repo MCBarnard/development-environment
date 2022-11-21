@@ -40,6 +40,5 @@
             <i><strong>php artisan queue:work</strong></i>. This will fire off the mail into your
             <a target="_blank" href="http://0.0.0.0:8084">mail hog</a> inbox
         </p>
-
     </body>
 </html>

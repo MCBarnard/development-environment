@@ -3,8 +3,16 @@ This is a docker compose project that spins up a development environment with sp
 Simply navigate into the app directory, build your project and serve your project from the public directory. 
 
 ## Setup
-To get started, rename the .env.example to .env `mv .env-example .env` and run `docker-compose up -d`
+To get started, rename the .env.example to .env 
+* `mv .env-example .env` 
+* `docker-compose up -d`
 
+* Run the queue worker for Laravel
+* `docker exec -it app bash`
+* `php artisan queue:work`
+
+IMPORTANT! App uses node v16 and up
+* 
 ## Services
 #### This is for development navigation and can only be run once docker is up
 * Nginx server pointing to the [public directory](http://0.0.0.0:8000)
