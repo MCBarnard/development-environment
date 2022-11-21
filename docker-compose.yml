@@ -7,6 +7,7 @@ services:
     build:
       context: .
       dockerfile: .docker/php/Dockerfile
+    restart: always
     expose:
       - 9000
     volumes:
@@ -25,6 +26,7 @@ services:
       dockerfile: .docker/nginx/Dockerfile
     volumes:
       - ./app/public:/usr/src/app/public
+    restart: always
     ports:
       - 80:80
     depends_on:
@@ -56,6 +58,7 @@ services:
   redis:
     container_name: redis
     image: redis:latest
+    restart: always
     ports:
       - 6379:6379
     networks:
@@ -66,6 +69,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
+    restart: always
     ports:
       - 8081:80
     environment:
@@ -82,6 +86,7 @@ services:
     container_name: redis-commander
     hostname: redis-commander
     image: ghcr.io/joeferner/redis-commander:latest
+    restart: always
     depends_on:
       - redis
     environment:
@@ -95,6 +100,7 @@ services:
   rabbitmq:
     image: "rabbitmq:3.8-management"
     container_name: rabbitmq
+    restart: always
     ports:
       - 8083:15672
     environment:
@@ -105,6 +111,17 @@ services:
       - redis
       - redis-commander
       - db
+    networks:
+      - app_network
+
+  # Mail trap
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8084:8025
     networks:
       - app_network
 # ================================================================= #
